@@ -1,13 +1,8 @@
 receivers:
   otlp:
     protocols:
-      grpc:
-        endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
-  httplogreceiver/json:
-    endpoint: 0.0.0.0:8082
-    source: json
   prometheus:
     config:
       global:
@@ -90,6 +85,6 @@ service:
       processors: [batch]
       exporters: [signozclickhousemetrics]
     logs:
-      receivers: [otlp, httplogreceiver/json]
+      receivers: [otlp]
       processors: [batch]
       exporters: [clickhouselogsexporter]
