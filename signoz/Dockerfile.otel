@@ -5,4 +5,4 @@ COPY signoz/otel-collector-opamp-config.yaml /etc/manager-config.yaml
 
 EXPOSE 4318 13133 1777 8888
 
-CMD ["signoz-otel-collector", "--config=/etc/otel-collector-config.yaml", "--manager-config=/etc/manager-config.yaml", "--feature-gates=-pkg.translator.prometheus.NormalizeName"]
+CMD ["signoz-otel-collector", "--config=/etc/otel-collector-config.yaml", "--feature-gates=-pkg.translator.prometheus.NormalizeName"]
