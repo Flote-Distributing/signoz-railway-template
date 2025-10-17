@@ -2,8 +2,9 @@ receivers:
   otlp:
     protocols:
       http:
-        # Bind to Railway-assigned port so domain works (fixes 502s)
-        endpoint: 0.0.0.0:${env:PORT}
+        endpoint: 0.0.0.0:4318
+      grpc:
+        endpoint: 0.0.0.0:4317
   prometheus:
     config:
       global:
@@ -69,6 +70,7 @@ service:
   telemetry:
     logs:
       encoding: json
+      level: debug
   extensions:
     - health_check
     - pprof
