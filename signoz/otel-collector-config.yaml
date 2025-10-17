@@ -1,10 +1,9 @@
 receivers:
   otlp:
     protocols:
-      grpc:
-        endpoint: 0.0.0.0:4317
       http:
-        endpoint: 0.0.0.0:4318
+        # Bind to Railway-assigned port so domain works (fixes 502s)
+        endpoint: 0.0.0.0:${env:PORT}
   prometheus:
     config:
       global:
@@ -59,13 +58,13 @@ exporters:
   clickhousetraces:
     datasource: tcp://clickhouse:9000/signoz_traces
     low_cardinal_exception_grouping: ${env:LOW_CARDINAL_EXCEPTION_GROUPING}
-    use_new_schema: true
+    use_new_schema: false
   signozclickhousemetrics:
     dsn: tcp://clickhouse:9000/signoz_metrics
   clickhouselogsexporter:
     dsn: tcp://clickhouse:9000/signoz_logs
     timeout: 10s
-    use_new_schema: true
+    use_new_schema: false
 service:
   telemetry:
     logs:
