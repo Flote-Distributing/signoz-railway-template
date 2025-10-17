@@ -1,10 +1,16 @@
 receivers:
+  # Standard OTLP receiver on canonical ports (internal-to-apps, TCP proxy)
   otlp:
     protocols:
       http:
         endpoint: 0.0.0.0:4318
       grpc:
         endpoint: 0.0.0.0:4317
+  # Additional HTTP receiver bound to Railway-assigned service port for public domain
+  otlp/httpsvc:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:${env:PORT}
   prometheus:
     config:
       global:
@@ -76,11 +82,11 @@ service:
     - pprof
   pipelines:
     traces:
-      receivers: [otlp]
+      receivers: [otlp, otlp/httpsvc]
       processors: [signozspanmetrics/delta, batch]
       exporters: [clickhousetraces]
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, otlp/httpsvc]
       processors: [batch]
       exporters: [signozclickhousemetrics]
     metrics/prometheus:
@@ -88,6 +94,6 @@ service:
       processors: [batch]
       exporters: [signozclickhousemetrics]
     logs:
-      receivers: [otlp]
+      receivers: [otlp, otlp/httpsvc]
       processors: [batch]
       exporters: [clickhouselogsexporter]
